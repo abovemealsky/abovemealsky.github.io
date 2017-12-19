@@ -1,1 +1,1 @@
-这个真的能代替wordpress?
+Hello github.io
