@@ -1,0 +1,8 @@
+title: 自由岁月
+description: 
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-architect
+
+gems:
+  - jekyll-mentions
