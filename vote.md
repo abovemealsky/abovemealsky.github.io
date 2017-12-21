@@ -30,70 +30,41 @@ The voting stage finishes if all peer have fulfilled his submission chances, i.e
 
 ### Example:
 
-Alice, Bob, Carl, Daniel, Eva, Fibby
+6 voters: Alice, Bob, Carl, Daniel, Eva, Fibby
 
 2 votes per person
 
----
+Peer | vote
+------------ | -------------
+Alice (blacklist{}) | Va,b & V'a,f (v' means invalid content)
+Bob (blacklist{})| Vb,a & Vb,e 
+Carl (blacklist{}) | Vc,a & Vc,d 
+Daniel (blacklist{}) | Vd,b & V'd,a 
+Eva (blacklist{}) | Ve,f & Ve,c 
+Fibby (blacklist{}) | Vf,b & Vf,c
 
-Alice (blacklist{}): Va,b & V'a,f (v' means invalid content)
-
-Bob (blacklist{}): Vb,a & Vb,e 
-
-Carl (blacklist{}): Vc,a & Vc,d 
-
-Daniel (blacklist{}): Vd,b & V'd,a 
-
-Eva (blacklist{}): Ve,f & Ve,c 
-
-Fibby (blacklist{}): Vf,b & Vf,c
-
-
----
-
-Alice validates: Vb,a & Vc,a and invalidates V'd,a
-
-Bob validates: Va,b & Vd,b & Vf,b
-
-Carl does not validate anything 
-
-Daniel validates: Vc,d
-
-Eva validates: Vb,e
-
-Fibby validates: Ve,f and invalidates V'a,f
-
+Peer | validate | invalidate
+------------ | ------------- | -------------
+Alice (blacklist{}) | Vb,a & Vc,a | V'd,a
+Bob (blacklist{}) | Va,b & Vd,b & Vf,b | 
+Carl (blacklist{}) | null | null
+Daniel (blacklist{}) | Vc,d | 
+Eva (blacklist{}) | Vb,e | 
+Fibby (blacklist{}) | Ve,f | V'a,f
 
 8 votes in the system, 4 votes short
 
----
+Peer | votes
+------------ | -------------
+Alice (blacklist{}) | Va,d ( this d could be anything not in black list, f is not in black list since he told alice)
+Dainal (blacklist{}) | V'd,a ( a is not blacklisted because a invalidates previously)
+Eva (blacklist {c}) | Ve,a
+Fibby (blacklist {c}) | Vf,d
 
-Alice resubmit: Va,d ( this d could be anything not in black list, f is not in black list since he told alice)
-
-Bob satisfied
-
-Carl satisfied
-
-Dainal resubmit something wrong: V'd,a ( a is not blacklisted because a invalidates previously)
-
-Eva (blacklist {c}) resubmit: Ve,a
-
-Fibby (blacklist {c}) resubmit: Vf,d
-
-
----
-
-Alice validates: Ve,a and invalidates: V'd,a
-
-Bob does nothing
-
-Carl does nothing
-
-Dainal verifies: Va,d & Vf,d
-
-Eva does nothing
-
-Fibby does nothing
+Peer | validate | invalidate
+------------ | ------------- | -------------
+Alice (blacklist{}) | Ve,a | V'd,a
+Dainal (blacklist{}) | Va,d | Vf,d
 
 11 votes in the system and 1 vote short
 
@@ -103,65 +74,40 @@ Assume Daniel keeps resubmit invalid votes, so after some iteration, the final v
 Vb,a | Vc,a | Va,b | Vd,b | Vf,b | Vc,d | Vb,e | Ve,f | Ve,a | Va,d | Vf,d
 
 
----
+Peer | reveals
+------------ | ------------- 
+Alice (blacklist{}) | (Vb,a + Vc,a + Ve,a)
+Bob (blacklist{}) | (Va,b + Vd,b + Vf,b)
+Daniel (blacklist{}) | fail to reveal result (Vc,d & Va,d & Vf,d)
+Eva (blacklist {c}) | (Vb,e)
+Fibby (blacklist {c}) | (Ve,f)
 
-Alice reveals result: (Vb,a + Vc,a + Ve,a)
-
-Bob reveals result: (Va,b + Vd,b + Vf,b)
-
-Carl does nothing
-
-Daniel fail to reveal result (Vc,d & Va,d & Vf,d)
-
-Eva (blacklist {c}) reveals result (Vb,e)
-
-Fibby (blacklist {c}) reveals result (Ve,f)
-
-
----
-
-Alice (blacklist {d}) finds one vote not revealed Va,d
-
-Bob is satisfied
-
-Carl (blacklist {d}) finds one vote is not reveald Vc,d 
-
-Daniel is satisfied
-
-Eva is satisfied
-
-Fibby (blacklist {c, d}) finds one vote is not reveald Vf,d
+Alice (blacklist {d}) finds one vote not revealed Va,d, Carl (blacklist {d}) finds one vote is not reveald Vc,d, Fibby (blacklist {c, d}) finds one vote is not reveald Vf,d
 
 Now revealed result in the ledger are: 
 
 (Vb,a + Vc,a + Ve,a) | (Va,b + Vd,b + Vf,b) | (Vb,e) |  (Ve,f)
 
 
----
+Peer | votes
+------------ | ------------- 
+Alice (blacklist {d}) | Va,b
+Carl (blacklist {d}) | Vc,a
+Fibby (blacklist {c, d}) | Vf,b
 
-Alice (blacklist {d}) votes Va,b
-
-Carl (blacklist {d}) votes Vc,a
-
-Fibby (blacklist {c, d}) votes Vf,b
-
-
----
-
-Alice validates Vc,a
-
-Bob validates Va,b & Vf,b
+Peer | validates
+------------ | ------------- 
+Alice  (blacklist {d}) | Vc,a
+Bob (blacklist{}) | Va,b & Vf,b
 
 Now ledger have three new votes transaction
 
 Vb,a | Vc,a | Va,b | Vd,b | Vf,b | Vc,d | Vb,e | Ve,f | Ve,a | Va,d | Vf,d |Va,b | Vc,a | Vf,b
 
-
----
-
-Alice reveals Vc,a
-
-Bob reveals (Va,b+Vf,b)
+Peer | reveals
+------------ | ------------- 
+Alice (blacklist {d})| Vc,a
+Bob (blacklist{})| (Va,b+Vf,b)
 
 
 Now the ledger have three new counts transcation
