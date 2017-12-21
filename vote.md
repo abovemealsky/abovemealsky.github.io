@@ -1,18 +1,20 @@
 # Voting Scheme
 
+---
 voter: i,
-
+---
 Votes: Vij=(0,1) or (1,0)
-
+---
 total number of voters: M
-
+---
 max vote chances: N
-
+---
 a list of other voters keys: k1,...kj...
-
+---
 blacklist: {Pk*}
-
+---
 initialize: Xi=N
+---
 
 * Voting Stage
 1. In time duration T0: each peer i submit Xi votes(transaction), Vij (submitted by peer i, encrypted by peer j's key, i.e., Kj not in the black list) and validates other peers votes encryped by his key. The votes(transaction)is only valid and put on the ledger if peer j says it's valid (i.e., not containing wrong information) and there are less than N votes submitted by peer i on the ledger. If a vote is invalid it does not appear on ledger but peer j will let peer i know about it.
@@ -37,127 +39,133 @@ Alice, Bob, Carl, Daniel, Eva, Fibby
 
 2 votes per person
 
----voting stage---
+---
+Alice (blacklist{}): Va,b & V'a,f (v' means invalid content)
+---
+Bob (blacklist{}): Vb,a & Vb,e 
+---
+Carl (blacklist{}): Vc,a & Vc,d 
+---
+Daniel (blacklist{}): Vd,b & V'd,a 
+---
+Eva (blacklist{}): Ve,f & Ve,c 
+---
+Fibby (blacklist{}): Vf,b & Vf,c
+---
 
-Alice (blacklist{}): Va,b || V'a,f (v' means invalid content)
-
-Bob (blacklist{}): Vb,a || Vb,e 
-
-Carl (blacklist{}): Vc,a || Vc,d 
-
-Daniel (blacklist{}): Vd,b || V'd,a 
-
-Eva (blacklist{}): Ve,f || Ve,c 
-
-Fibby (blacklist{}): Vf,b || Vf,c
-
-----------------
-
-Alice validates: Vb,a || Vc,a and invalidates V'd,a
-
-Bob validates: Va,b || Vd,b || Vf,b
-
+---
+Alice validates: Vb,a & Vc,a and invalidates V'd,a
+---
+Bob validates: Va,b & Vd,b & Vf,b
+---
 Carl does not validate anything 
-
+---
 Daniel validates: Vc,d
-
+---
 Eva validates: Vb,e
-
+---
 Fibby validates: Ve,f and invalidates V'a,f
+---
 
 8 votes in the system, 4 votes short
 
-----------------
-
+---
 Alice resubmit: Va,d ( this d could be anything not in black list, f is not in black list since he told alice)
-
+---
 Bob satisfied
-
+---
 Carl satisfied
-
+---
 Dainal resubmit something wrong: V'd,a ( a is not blacklisted because a invalidates previously)
-
+---
 Eva (blacklist {c}) resubmit: Ve,a
-
+---
 Fibby (blacklist {c}) resubmit: Vf,d
+---
 
-----------------
+---
 Alice validates: Ve,a and invalidates: V'd,a
-
+---
 Bob does nothing
-
+---
 Carl does nothing
-
-Dainal verifies: Va,d || Vf,d
-
+---
+Dainal verifies: Va,d & Vf,d
+---
 Eva does nothing
-
+---
 Fibby does nothing
-
+---
 11 votes in the system and 1 vote short
 
 Assume Daniel keeps resubmit invalid votes, so after some iteration, the final votes in the board are still 11:
 
-(Vb,a || Vc,a || Va,b || Vd,b || Vf,b || Vc,d || Vb,e || Ve,f || Ve,a || Va,d || Vf,d)
+---
+Vb,a | Vc,a | Va,b | Vd,b | Vf,b | Vc,d | Vb,e | Ve,f | Ve,a | Va,d | Vf,d
+---
 
----revealing stage---
+---
 Alice reveals result: (Vb,a + Vc,a + Ve,a)
-
+---
 Bob reveals result: (Va,b + Vd,b + Vf,b)
-
+---
 Carl does nothing
-
-Daniel fail to reveal result (Vc,d || Va,d || Vf,d)
-
+---
+Daniel fail to reveal result (Vc,d & Va,d & Vf,d)
+---
 Eva (blacklist {c}) reveals result (Vb,e)
-
+---
 Fibby (blacklist {c}) reveals result (Ve,f)
+---
 
-------
-
+---
 Alice (blacklist {d}) finds one vote not revealed Va,d
-
+---
 Bob is satisfied
-
+---
 Carl (blacklist {d}) finds one vote is not reveald Vc,d 
-
+---
 Daniel is satisfied
-
+---
 Eva is satisfied
-
+---
 Fibby (blacklist {c, d}) finds one vote is not reveald Vf,d
-
+---
 Now revealed result in the ledger are: 
-(Vb,a + Vc,a + Ve,a) || (Va,b + Vd,b + Vf,b) || (Vb,e) ||  (Ve,f)
+---
+(Vb,a + Vc,a + Ve,a) | (Va,b + Vd,b + Vf,b) | (Vb,e) |  (Ve,f)
+---
 
-----Continue to stage 1 voting stage
+---
 Alice (blacklist {d}) votes Va,b
-
+---
 Carl (blacklist {d}) votes Vc,a
-
+---
 Fibby (blacklist {c, d}) votes Vf,b
-
+---
 
 ---
 Alice validates Vc,a
-
-Bob validates Va,b || Vf,b
-
+---
+Bob validates Va,b & Vf,b
+---
 Now ledger have three new votes transaction
 
-(Vb,a || Vc,a || Va,b || Vd,b || Vf,b || Vc,d || Vb,e || Ve,f || Ve,a || Va,d || Vf,d ||)
-(Va,b || Vc,a || Vf,b)
+---
+Vb,a | Vc,a | Va,b | Vd,b | Vf,b | Vc,d | Vb,e | Ve,f | Ve,a | Va,d | Vf,d |Va,b | Vc,a | Vf,b
+---
 
-----Reveal stage
-
+---
 Alice reveals Vc,a
-
+---
 Bob reveals (Va,b+Vf,b)
+---
 
 Now the ledger have three new counts transcation
 
-(Vb,a + Vc,a + Ve,a) || (Va,b + Vd,b + Vf,b) || (Vb,e) ||  (Ve,f) || (Vc,a) || (Va,b + Vf,b)
-
+---
+(Vb,a + Vc,a + Ve,a) | (Va,b + Vd,b + Vf,b) | (Vb,e) |  (Ve,f) | (Vc,a) | (Va,b + Vf,b)
+---
 Note the peers does not to re-reveal previously revealed counts
 
 Every iteration will have fewer votes to be submitted, validated and revealed, leading to convergence finally
