@@ -43,6 +43,7 @@ Daniel (blacklist{}) | Vd,b & V'd,a
 Eva (blacklist{}) | Ve,f & Ve,c 
 Fibby (blacklist{}) | Vf,b & Vf,c
 
+
 Peer | validate | invalidate
 ------------ | ------------- | -------------
 Alice (blacklist{}) | Vb,a & Vc,a | V'd,a
@@ -52,7 +53,9 @@ Daniel (blacklist{}) | Vc,d |
 Eva (blacklist{}) | Vb,e | 
 Fibby (blacklist{}) | Ve,f | V'a,f
 
+
 8 votes in the system, 4 votes short
+
 
 Peer | votes
 ------------ | -------------
@@ -61,10 +64,12 @@ Dainal (blacklist{}) | V'd,a ( a is not blacklisted because a invalidates previo
 Eva (blacklist {c}) | Ve,a
 Fibby (blacklist {c}) | Vf,d
 
+
 Peer | validate | invalidate
 ------------ | ------------- | -------------
 Alice (blacklist{}) | Ve,a | V'd,a
 Dainal (blacklist{}) | Va,d | Vf,d
+
 
 11 votes in the system and 1 vote short
 
@@ -95,6 +100,7 @@ Alice (blacklist {d}) | Va,b
 Carl (blacklist {d}) | Vc,a
 Fibby (blacklist {c, d}) | Vf,b
 
+
 Peer | validates
 ------------ | ------------- 
 Alice  (blacklist {d}) | Vc,a
@@ -103,6 +109,7 @@ Bob (blacklist{}) | Va,b & Vf,b
 Now ledger have three new votes transaction
 
 Vb,a | Vc,a | Va,b | Vd,b | Vf,b | Vc,d | Vb,e | Ve,f | Ve,a | Va,d | Vf,d |Va,b | Vc,a | Vf,b
+
 
 Peer | reveals
 ------------ | ------------- 
